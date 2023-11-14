@@ -1,0 +1,6 @@
+# Root folder of this turbo monorepo
+# Doesn't send useless context to Docker daemon
+.git
+.github
+**/node_modules
+.svelte-kit

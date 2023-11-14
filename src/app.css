@@ -1,0 +1,75 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.yellow-shadow{
+  box-shadow: 0 0 74px #3f9c355c;
+  border-radius: 15px;
+}
+
+@layer base {
+  @font-face {
+    font-family: "Segoe UI";
+    font-weight: 400;
+    src: url(assets/fonts/segoe_ui-webfont.woff) format("woff");
+  }
+
+}
+
+.btn {
+  @apply rounded-none;
+}
+
+.btn-primary {
+  @apply bg-primary text-white;
+  @apply border-none
+}
+
+.btn-primary:hover{
+  background-color: #00b2a9;
+}
+
+
+.btn-accent {
+  @apply bg-accent text-white;
+  background-color: #008cc3;
+  @apply border-none
+}
+
+.btn-outline:disabled{
+  opacity: .1;
+}
+
+
+.btn-primary:hover{
+  background-color: #00b2a9;
+}
+
+.form-control .label {
+  padding-bottom: 2px;
+  font-size: 11px;
+  opacity: .8;
+  text-transform: uppercase;
+}
+
+/* Change the white to any color */
+.form-control input:-webkit-autofill,
+.form-control input:-webkit-autofill:hover,
+.form-control input:-webkit-autofill:focus,
+.form-control input:-webkit-autofill:active{
+  -webkit-box-shadow: 0 0 0 30px white inset !important;
+}
+
+html,
+body,
+#app {
+  height: 100vh;
+  min-height: 100vh;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+h1 {
+  font-size: 4rem;
+  font-weight: bold;
+  display: block;
+}
