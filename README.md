@@ -1,8 +1,11 @@
-# RSM - Ebner Stolz - Prompt DB
+# RSM - Ebner Stolz - Prompt DB Frontend
 
 ## Developing
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+1. Installed dependencies with `npm install` (or `pnpm install` or `yarn`)
+2. Start backend (separate project)
+3. Link to backend by creating a `.env` file in the root directory, use .env.example as a template
+4. Start a development server:
 
 ```bash
 npm run dev
