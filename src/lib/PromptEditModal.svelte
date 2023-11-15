@@ -19,7 +19,7 @@
             <select bind:value={data.meta.role} class="select  select-bordered w-full max-w-xs">
                 <option value="user">Role: User</option>
                 <option value="system">Role: System</option>
-              </select>
+            </select>
 
         </div>
 
@@ -30,7 +30,7 @@
                 Vollständiger Prompt:    
             </label>
             <textarea
-                class="input input-bordered h-20 p-3 mt-2 w-full"
+                class="input input-bordered p-3 mt-2 w-full h-64"
                 placeholder="Prompt"
                 id="content"
                 bind:value={data.content} ></textarea>
