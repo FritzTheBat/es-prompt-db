@@ -1,12 +1,23 @@
-export function randomPassword(){
-    let password = ''
-    let chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
-    for (let i = 0; i < 8; i++) {
-        password += chars.charAt(Math.floor(Math.random() * chars.length))
-    }
-    return password
-}
+export   function debounce(func, timeout = 300){
+    let timer
+    return (...args) => {
+      clearTimeout(timer)
+      timer = setTimeout(() => {func.apply(this, args) }, timeout) 
+    };
+  }
 
+export function throttle (callback, limit) {
+    var waiting = false;                      // Initially, we're not waiting
+    return function () {                      // We return a throttled function
+        if (!waiting) {                       // If we're not waiting
+            callback.apply(this, arguments);  // Execute users function
+            waiting = true;                   // Prevent future invocations
+            setTimeout(function () {          // After a period of time
+                waiting = false;              // And allow future invocations
+            }, limit);
+        }
+    }
+}
 
 export function slugify(text: string){
     return text.toLowerCase().replace(/[^\w ]+/g,'').replace(/ +/g,'-')

@@ -3,8 +3,8 @@ import type {Database} from "$lib/database.types";
 import { browser } from '$app/environment'; 
 
 export const supabase = createClient<Database>(
-  import.meta.env.VITE_SUPABASE_URL_REMOTE,
-  import.meta.env.VITE_SUPABASE_ANON_KEY_REMOTE
+  import.meta.env.VITE_SUPABASE_URL,
+  import.meta.env.VITE_SUPABASE_ANON_KEY
 );
 
 

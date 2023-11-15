@@ -2,7 +2,6 @@
   import type { Provider } from "@supabase/supabase-js";
   import { supabase } from "./db";
   import { page } from "$app/stores";
-  import { _ } from "$lib/i18n";
 
   interface HelperText {
     error: boolean;
@@ -106,7 +105,7 @@
         on:click={() => handleLogin("LOGIN")}
         type="button"
         class="btn btn-primary  w-full">
-        {$_('Login', 'Logge dich ein')}
+        Login
       </button>
     </span>
   </div>

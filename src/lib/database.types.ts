@@ -286,7 +286,7 @@ export interface Database {
           id: number
           label: string | null
           meta: Json | null
-          subject: number | null
+          subject_id: number | null
           user_id: string | null
         }
         Insert: {
@@ -295,7 +295,7 @@ export interface Database {
           id?: number
           label?: string | null
           meta?: Json | null
-          subject?: number | null
+          subject_id?: number | null
           user_id?: string | null
         }
         Update: {
@@ -304,13 +304,13 @@ export interface Database {
           id?: number
           label?: string | null
           meta?: Json | null
-          subject?: number | null
+          subject_id?: number | null
           user_id?: string | null
         }
         Relationships: [
           {
-            foreignKeyName: "prompts_subject_fkey"
-            columns: ["subject"]
+            foreignKeyName: "prompts_subject_id_fkey"
+            columns: ["subject_id"]
             referencedRelation: "prompt_subjects"
             referencedColumns: ["id"]
           },

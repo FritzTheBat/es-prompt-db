@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { supabase } from "./db";
 	import { base } from "$app/paths";
 
   export let item: any = {};
@@ -10,10 +9,10 @@
 <li
   class="w-full block cursor-pointer hover:bg-gray-200 focus:outline-none focus:bg-gray-200 border-b-[1px] border-white transition duration-150 ease-in-out"
 >
-  <a href="{base}/shares/{item.id}">
+  <a href="{base}/subjects/{item.id}">
     <div class="flex items-center px-4 py-4 sm:px-6">
       <div class="min-w-0 flex-1 flex items-center">
-        <div class="text-sm leading-5 font-medium truncate">{item.name}</div>
+        <div class="text-sm leading-5 font-medium truncate">{item.name||item.label}</div>
       </div>
 
       <button

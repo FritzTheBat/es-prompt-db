@@ -7,7 +7,6 @@
   	import Toaster from '$lib/Toaster.svelte';
 	import { base } from "$app/paths";
 	import { browser } from '$app/environment'
-	import { _, locale } from "$lib/i18n";
   	import { user } from '$lib/user';
   	import Auth from '$lib/Auth.svelte';
 
