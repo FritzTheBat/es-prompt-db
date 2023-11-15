@@ -43,7 +43,7 @@
   };
 
   onMount(() => {
-    fetchData()
+        fetchData()
     searchInputRef.focus()
   })
 

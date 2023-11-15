@@ -92,7 +92,7 @@
   <div class="w-full">
     <div class="flex justify-between">
       <h2 class="mb-6 text-l font-bold">
-        Prompts für {subject.name}
+        Prompts
       </h2>
       <input type="text" bind:this={searchInputRef} bind:value={searchText} class="form-control ms-5 input input-sm" placeholder="suchen" />
     </div>
