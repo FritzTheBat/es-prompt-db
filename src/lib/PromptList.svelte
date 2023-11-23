@@ -17,11 +17,7 @@
     let parentName = subject.name!
   
     $: itemsFiltered = items.filter((x) => x.label?.toLowerCase().includes(searchText.toLowerCase()))
-    $: {
-      if(items.length === 1 && !isAdmin($user)){
-        goto(`/subjects/${itemsFiltered[0].id}`)
-      }
-    }
+  
   
     const fetchData = async () => {
       let { data, error } = await supabase
