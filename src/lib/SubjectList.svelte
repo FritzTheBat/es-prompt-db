@@ -1,10 +1,8 @@
 <script lang="ts">
   import { isAdmin, user } from "$lib/user";
   import { supabase } from "./db";
-  import { onDestroy, onMount } from "svelte";
   import Subject from "$lib/SubjectListItem.svelte";
   import AddModal from "./SubjectEditModal.svelte";
-  import { goto } from "$app/navigation";
   import { showToast } from "./Toaster";
   import type { Tables } from "./server/db";
 
@@ -16,14 +14,21 @@
   let searchInputRef: HTMLInputElement
   let itemToDeleteId: number
   let maxItemsToShow = 999
+  export let parentId: number | null = null
 
   $: itemsFiltered = items.filter((x) => x.name!.toLowerCase().includes(searchText.toLowerCase()))
+
+  $: if(parentId || !parentId) {
+    fetchData()
+    searchInputRef?.focus()
+  }
 
 
   const fetchData = async () => {
     let { data, error } = await supabase
       .from("prompt_subjects")
       .select("*")
+      [parentId?"eq":"is"]("parent_id", parentId)
       .order("id", { ascending: false })
     if (error) {
       console.log("error", error)
@@ -38,10 +43,7 @@
     regNo: "",
   };
 
-  onMount(() => {
-        fetchData()
-    searchInputRef.focus()
-  })
+ 
 
   let prompt = ""
 
@@ -53,11 +55,13 @@
 
   const deleteItem = async (id: number) => {
     try {
-      await supabase.from("prompt_subjects").delete().eq("id", id)
+      const {status} = await supabase.from("prompt_subjects").delete().eq("id", id)
+      if (status == 204) throw "nicht gefunden / Rechte fehlen"
       items = items.filter((x) => x.id != id)
       showToast("Gelöscht")
     } catch (error) {
       console.log("error", error)
+      showToast("Fehler: " + error, "error")
     }
     deleteModal.close()
   }
@@ -65,7 +69,7 @@
   const addItem = async (data: any) => {
       let { data: newItem, error } = await supabase
         .from("prompt_subjects")
-        .insert({name: data.name, description: data.description, user_id: $user?.id })
+        .insert({name: data.name, description: data.description, user_id: $user?.id, parent_id: parentId })
         .select()
         .single()
 
@@ -79,35 +83,43 @@
 
   
 </script>
-
-<div class="w-full">
-  <div class="flex justify-between">
-    <h1 class="mb-6 text-xl h2">
-      Deine Dokumenttypen
-    </h1>
-    <input type="text" bind:this={searchInputRef} bind:value={searchText} class="form-control ms-5 input input-sm" placeholder="suchen" />
-  </div>
-  <div style="width: 400px" class="flex justify-center flex-col gap-10">
-    
-    <div class="bg-gray-100 overflow-hidden rounded-md">
-      <ul>
-        {#each itemsFiltered.slice(0, maxItemsToShow) as item (item.id)}
-          <Subject {item} onDelete={() => {itemToDeleteId = item.id; deleteModal.showModal()}} />
-        {/each}
-      </ul>
+{#if items.length}
+  <div class="w-full">
+    <div class="flex justify-between">
+      <h2 class="mb-6 text-xl h3">
+        Themen
+      </h2>
+      <input type="text" bind:this={searchInputRef} bind:value={searchText} class="form-control ms-5 input text-right input-sm" placeholder="suchen" />
     </div>
-    {#if itemsFiltered.length == 0}
+    <div  class="flex justify-center flex-col gap-10">
+      
       <div class="bg-gray-100 overflow-hidden rounded-md">
-        <div class="p-10 text-center">
-          Keine Typen {searchText?'gefunden':'vorhanden'}.
-        </div>
+        <ul>
+          {#each itemsFiltered.slice(0, maxItemsToShow) as item (item.id)}
+            <Subject {item} onDelete={() => {itemToDeleteId = item.id; deleteModal.showModal()}} />
+          {/each}
+        </ul>
       </div>
-    {/if}
+      {#if itemsFiltered.length == 0}
+        <div class="bg-gray-100 overflow-hidden rounded-md">
+          <div class="p-10 text-center">
+            Keine Typen {searchText?'gefunden':'vorhanden'}.
+          </div>
+        </div>
+      {/if}
 
-    <button on:click={add} class="btn btn-primary">Hinzufügen</button>
+      {#if parentId}
+        <button on:click={add} class="btn btn-primary">Thema hinzufügen</button>
+      {/if}
+    </div>
+
   </div>
 
-</div>
+{:else}
+  <div class="mt-4 text-gray-400">
+    <a href="#">+ Thema hinzufügen</a>
+  </div>
+{/if}
 
 
 <dialog id="addModal" class="modal">
@@ -127,6 +139,3 @@
 </dialog>
 
 
-<style>
-  
-</style>

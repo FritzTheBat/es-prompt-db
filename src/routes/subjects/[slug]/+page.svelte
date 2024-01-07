@@ -1,5 +1,25 @@
-<a class="opacity-60 -mb-1" href="{base}">zurück</a>
+<div class="text-sm opacity-60 breadcrumbs">
+    <ul>
+      <li>
+        <a href={base}>
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="w-4 h-4 stroke-current me-2"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"></path></svg>
+          Home
+        </a>
+      </li> 
 
+      {#each breadCrumbs as breadcrumb}
+
+        <li>
+          <a href="{base}/subjects/{breadcrumb.id}">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="w-4 h-4 stroke-current me-2"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"></path></svg>
+            {breadcrumb.name}
+          </a>
+        </li>
+      {/each}
+
+    </ul> 
+
+</div>
 <div class="relative">
 
     <!-- svelte-ignore a11y-mouse-events-have-key-events -->
@@ -14,14 +34,20 @@
 
 </div>
   
-<PromptList subject = {data.subject}/>
+<div class=" gap-3">
+    <SubjectList parentId = {data.subject.id}/>
+    <PromptList subject = {data.subject}/>
+</div>
+
 <script lang="ts">
     import PromptList from "$lib/PromptList.svelte";
-	import { base } from "$app/paths";
     import { debounce } from "$lib/util";
     import { showToast } from "$lib/Toaster";
     import { supabase } from "$lib/db";
+    import SubjectList from "$lib/SubjectList.svelte";
+    import { base } from "$app/paths";
 	export let data: import('./$types').PageData
+    let breadCrumbs: {name: string, id: number}[] = []
     let hoverHead = false
     let headlineText: string
     let saveHeadingDebounced = debounce(async (newHeadline: string) => {
@@ -36,7 +62,17 @@
         showToast("Dokumenttyp gespeichert")
     }, 3000)
 
-    $: saveHeadingDebounced(headlineText)
+    $: { breadCrumbs = []; if(data.subject.parent_id) addParentToBreadcrumbs(data.subject.parent_id)}
+
+    async function addParentToBreadcrumbs(id: number){
+        let {data: parent} = await supabase.from("prompt_subjects").select("id, name, parent_id").eq("id", id).single()
+        if(parent){
+            breadCrumbs = [parent, ...breadCrumbs]
+            if(parent!.parent_id) addParentToBreadcrumbs(parent!.parent_id)
+        }
+    }
+
+    //$: saveHeadingDebounced(headlineText)
 
 </script>
 
